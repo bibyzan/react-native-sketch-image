@@ -1,38 +1,56 @@
 package com.wwimmo.imageeditor;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.media.ExifInterface;
+import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.DrawableRes;
-import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v7.content.res.AppCompatResources;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
-import android.view.ScaleGestureDetector;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.support.v4.view.GestureDetectorCompat;
+import android.view.ScaleGestureDetector;
+import android.view.View;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.wwimmo.imageeditor.utils.CanvasText;
+import com.wwimmo.imageeditor.utils.Utility;
+import com.wwimmo.imageeditor.utils.entities.ArrowEntity;
+import com.wwimmo.imageeditor.utils.entities.BorderStyle;
+import com.wwimmo.imageeditor.utils.entities.CircleEntity;
+import com.wwimmo.imageeditor.utils.entities.EntityType;
+import com.wwimmo.imageeditor.utils.entities.MotionEntity;
+import com.wwimmo.imageeditor.utils.entities.RectEntity;
+import com.wwimmo.imageeditor.utils.entities.TextEntity;
+import com.wwimmo.imageeditor.utils.entities.TriangleEntity;
+import com.wwimmo.imageeditor.utils.gestureDetectors.MoveGestureDetector;
+import com.wwimmo.imageeditor.utils.gestureDetectors.RotateGestureDetector;
+import com.wwimmo.imageeditor.utils.layers.Font;
+import com.wwimmo.imageeditor.utils.layers.Layer;
+import com.wwimmo.imageeditor.utils.layers.TextLayer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,22 +58,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import com.wwimmo.imageeditor.utils.CanvasText;
-import com.wwimmo.imageeditor.utils.Utility;
-import com.wwimmo.imageeditor.utils.layers.Font;
-import com.wwimmo.imageeditor.utils.layers.Layer;
-import com.wwimmo.imageeditor.utils.layers.TextLayer;
-import com.wwimmo.imageeditor.utils.entities.ArrowEntity;
-import com.wwimmo.imageeditor.utils.entities.BorderStyle;
-import com.wwimmo.imageeditor.utils.entities.EntityType;
-import com.wwimmo.imageeditor.utils.entities.CircleEntity;
-import com.wwimmo.imageeditor.utils.entities.RectEntity;
-import com.wwimmo.imageeditor.utils.entities.MotionEntity;
-import com.wwimmo.imageeditor.utils.entities.TriangleEntity;
-import com.wwimmo.imageeditor.utils.entities.TextEntity;
-import com.wwimmo.imageeditor.utils.gestureDetectors.MoveGestureDetector;
-import com.wwimmo.imageeditor.utils.gestureDetectors.RotateGestureDetector;
 
 public class ImageEditor extends View {
     // Data
@@ -458,6 +460,7 @@ public class ImageEditor extends View {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public boolean openImageFile(String filename, String directory, String mode) {
         if(filename != null) {
             int res = mContext.getResources().getIdentifier(
@@ -506,6 +509,7 @@ public class ImageEditor extends View {
         return false;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static Bitmap getBitmapFromDrawable(Context context, @DrawableRes int drawableId) {
         Drawable drawable = AppCompatResources.getDrawable(context, drawableId);
 

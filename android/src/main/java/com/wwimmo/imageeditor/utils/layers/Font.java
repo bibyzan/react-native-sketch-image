@@ -1,10 +1,11 @@
 package com.wwimmo.imageeditor.utils.layers;
 
-import com.facebook.react.uimanager.ThemedReactContext;
-
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.graphics.Typeface;
+import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
+
+import com.facebook.react.uimanager.ThemedReactContext;
 
 public class Font {
     private int color;
